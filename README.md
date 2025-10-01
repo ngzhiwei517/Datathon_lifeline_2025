@@ -50,7 +50,7 @@ Every year, thousands of expectant mothers undergo CTG monitoring during labor. 
 **Challenge:** Severe class imbalance requiring careful handling to avoid missing critical Pathologic cases.
 
 ---
-
+## Our Approach
 ### 1. Data Cleaning
 - Identified and removed 10 duplicate rows
 - Corrected data types (NSP and CLASS converted to categorical)
