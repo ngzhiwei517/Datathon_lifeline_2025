@@ -173,7 +173,6 @@ Engineered Features (total_abnormal_var, ASTV_ALTV_ratio): These new features al
 
 ## References
 - UCI Cardiotocography Dataset: https://archive.ics.uci.edu/dataset/193/cardiotocography
-- 
 - Medical context: Workshop materials on CTG interpretation and fetal monitoring
 
 ### Technical Resources
