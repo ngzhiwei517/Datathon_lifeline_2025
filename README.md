@@ -160,6 +160,7 @@ ALTV & ASTV (Abnormal Variability Measures): XGBoost ranked these among the top 
 XGBoost ranked DP (Prolonged Decelerations) and AC (Accelerations) among its most important features. This matches our EDA, where DP was rare in Normal/Suspect but common in Pathologic, while AC was protective.XGBoost ranked AC as 7, confirming the model learned the inverse relationship (more accelerations → healthier baby).
 
 Engineered Features (total_abnormal_var, ASTV_ALTV_ratio): These new features also appeared among the top predictors. Their high importance shows that adding features based on medical reasoning can improve prediction.
+
 ---
 
 ## Running the Code (Google Colab)
