@@ -66,7 +66,7 @@ Every year, thousands of expectant mothers undergo CTG monitoring during labor. 
 - ASTV showed bimodal distribution indicating clear separation between Normal and at-risk groups
 - LB (baseline heart rate) centered around 130-140 bpm (healthy range)
 - Checking outlier
-
+- 
 **Checking impossible value for each feature**
 -LB not possible less than 50 or more than 240 as a human
 ---
@@ -75,7 +75,7 @@ Every year, thousands of expectant mothers undergo CTG monitoring during labor. 
 ### 3. Data Preprocessing
 - Drop perfect duplicates
 - Dropped redundant alternative labeling columns (A, B, C, D, E, AD, DE, LD, FS, SUSP)
-- 
+
 ---
 ### 4. Exploring Relationships
 **Correlation Analysis (Heatmap):**
