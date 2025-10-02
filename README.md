@@ -12,7 +12,6 @@
   - [Data Splitting](#5-data-splitting)
   - [Feature Engineering](#6-feature-engineering)
   - [Model Evaluation](#7-model-evaluation)
-- [Key Results](#key-results)
 - [Running the Code](#running-the-code)
 - [References](#references)
 - [Clinical Impact](#clinical-impact)
@@ -140,28 +139,6 @@ Trained four models with class imbalance handling:
 
 ---
 
-## Key Results
-
-### Feature Importance (XGBoost)
-Top predictors matched EDA findings:
-1. ALTV
-2. Median heartrate
-3. ASTV
-4. total_abnormal_var
-5. Mean heartrate
-6. DP
-7. AC
-8. ASTV_ALTC_ratio
-
-The most influential features identified by XGBoost were closely aligned with patterns observed during our exploratory data analysis (EDA):
-
-ALTV & ASTV (Abnormal Variability Measures): XGBoost ranked these among the top predictors. Our EDA showed a clear progression where Normal cases had low variability, while Suspect and Pathologic groups exhibited significantly higher ASTV/ALTV. This confirms that abnormal variability is a key risk indicator.
-
-XGBoost ranked DP (Prolonged Decelerations) and AC (Accelerations) among its most important features. This matches our EDA, where DP was rare in Normal/Suspect but common in Pathologic, while AC was protective.XGBoost ranked AC as 7, confirming the model learned the inverse relationship (more accelerations → healthier baby).
-
-Engineered Features (total_abnormal_var, ASTV_ALTV_ratio): These new features also appeared among the top predictors. Their high importance shows that adding features based on medical reasoning can improve prediction.
-
----
 
 ## Running the Code (Google Colab)
 1. Download the project notebooks (`.ipynb` files) from our repository.  
