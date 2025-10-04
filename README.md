@@ -4,9 +4,11 @@ Team: TM-113
 
 Team members:
 
--Ng Zhi Wei (DSAI/Y2)
--Wong Jing En (MAE/Y1)
--Lee Yan Sheng (MAE/Y2)
+Ng Zhi Wei (DSAI/Y2)
+
+Wong Jing En (MAE/Y1)
+
+Lee Yan Sheng (MAE/Y2)
 
 ## Table of Contents
 - [Project Overview](#project-overview)
