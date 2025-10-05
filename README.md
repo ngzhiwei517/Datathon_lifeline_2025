@@ -251,28 +251,27 @@ Training the Model (Google Colab)
 
 ### Testing
 
-Step 1: Download Required Files
+### Step 1: Download Required Files
 
 Download these files from our repository:
 - xgboost_model.pkl (trained model) / or you can choose to use our train model directly
 - Your test CSV file (must have the same columns as training data)
 
-Step 2: Open New Colab Notebook
+### Step 2: Open New Colab Notebook
 -Click "New Notebook"
 
-Step 3: Upload Files to Colab 
+### Step 3: Upload Files to Colab 
 1. Left sidebar → Files icon (folder icon)
 2. Click "Upload" button
 3. Upload these 2 files:
    * xgboost_model.pkl
    * Your test data CSV (e.g., test_sample.csv)
 
-Step 4: Get Your CSV File Path
+### Step 4: Get Your CSV File Path
 1. In the Files panel, find your uploaded CSV file
 2. Right-click the file → "Copy path"
 3. It will look like: /content/test_sample.csv
 
-Step 5: Run This Code
 
 ### Step 5: Run the Code
 
