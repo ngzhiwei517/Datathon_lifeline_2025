@@ -232,10 +232,10 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 - `test.py` - Testing script
 
 **Required Libraries:**
-```python
+`python`
 pandas, numpy, scikit-learn, xgboost
 
-## Option 1: Training from Scratch
+Option 1: Training from Scratch
 Google Colab Setup
 
 1. Open Google Colab
