@@ -1,5 +1,7 @@
 # TM-113: Lifeline - Fetal Distress Detection using CTG Data
 
+For how to train and test the model, please refer part 6, you can click the link to direct to that part
+
 **Team:** TM-113
 
 **Team Members:**
@@ -25,9 +27,9 @@
    - [9. Cross-Validation](#9-cross-validation)
    - [10. Inference Performance](#10-inference-performance)
 5. [Final Results](#final-results)
-6. [Running the Code](#running-the-code)
+6. [Training||Testing](#Training||Testing)
 7. [References](#references)
-8. [Acknowledgments](#acknowledgments)
+
 
 ---
 
@@ -99,19 +101,7 @@ Every year, thousands of expectant mothers undergo CTG monitoring during labor. 
 ### 4. Exploring Relationships
 
 **Correlation Analysis (Heatmap):**
-- **DP (Prolonged Decelerations):** +0.49 with NSP → strongest predictor
-- **ASTV:** +0.47 correlation
-- **ALTV:** +0.42 correlation
-- **AC (Accelerations):** –0.34 correlation (protective factor)
-- Histogram features (Mode, Mean, Median) highly collinear (r > 0.89)
-
 **Boxplot Analysis (Progression across classes):**
-- **ASTV:** Normal (median=41) → Suspect (63) → Pathologic (65)
-- **ALTV:** Near zero in Normal, elevated in Suspect/Pathologic
-- **DP:** Almost exclusive to Pathologic (median=1 vs 0 for Normal/Suspect)
-- **AC:** Higher in Normal (median=2) vs Pathologic (median=0) → protective signal
-- **UC:** Similar across classes (response quality > stress frequency)
-
 **Key Insight:** UC provides stress context, but fetal response features (ASTV, ALTV, AC, DP) determine the outcome.
 
 ### 5. Data Splitting
@@ -233,17 +223,140 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ---
 
-## Running the Code
+## Testing & Predictions
 
-### Google Colab Instructions
+### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
-1. Download the project notebook (`.ipynb` file) from our repository
-2. Upload the notebook to [Google Colab](https://colab.research.google.com/)
-3. Upload the dataset file `CTG_Original_3.csv` (which can be dowloaded from our datasets folder) into Colab:
-   - Via file upload button, OR
-   - Mount Google Drive and access from there
-4. Run all cells sequentially
+Training the Model (Google Colab)
 
+1. Open Google Colab
+
+-Go to colab.research.google.com
+-Click "New Notebook"
+
+
+2. Upload Files to Colab
+
+-Left sidebar → Files icon (folder icon)
+-Click "Upload" button
+-Upload the following files:
+
+   Project notebook (.ipynb file)
+   Dataset file: CTG_Original_3.csv (download from our datasets folder)
+
+3. Run the Notebook
+
+-Run all cells sequentially
+-The model will be trained and saved as xgboost_model.pkl
+
+### Testing & Predictions
+
+Step 1: Download Required Files
+
+Download these files from our repository:
+- xgboost_model.pkl (trained model) / or you can choose to use our train model directly
+- Your test CSV file (must have the same columns as training data)
+
+Step 2: Open New Colab Notebook
+-Click "New Notebook"
+
+Step 3: Upload Files to Colab 
+1. Left sidebar → Files icon (folder icon)
+2. Click "Upload" button
+3. Upload these 2 files:
+   * xgboost_model.pkl
+   * Your test data CSV (e.g., test_sample.csv)
+
+Step 4: Get Your CSV File Path
+1. In the Files panel, find your uploaded CSV file
+2. Right-click the file → "Copy path"
+3. It will look like: /content/test_sample.csv
+
+Step 5: Run This Code
+
+import pickle
+import pandas as pd
+from google.colab import files
+
+print("="*70)
+print("TESTING XGBOOST MODEL")
+print("="*70)
+
+# 1. Load model
+print("\n1. Loading model...")
+with open('xgboost_model.pkl', 'rb') as f:
+    model = pickle.load(f)
+print(" ✓ Model loaded")
+
+# 2. Load test data
+print("\n2. Loading test data...")
+input_file = '/content/test_sample.csv'  # UPDATE THIS PATH
+test_data_original = pd.read_csv(input_file)
+test_data = test_data_original.copy()
+print(f" ✓ Loaded {len(test_data)} samples")
+
+# 3. Feature engineering
+print("\n3. Applying feature engineering...")
+test_data['AC_per_UC'] = test_data['AC'] / (test_data['UC'] + 1)
+test_data['total_abnormal_var'] = test_data['ASTV'] + test_data['ALTV']
+test_data['ASTV_ALTV_ratio'] = test_data['ASTV'] / (test_data['ALTV'] + 1)
+test_data['decel_severity'] = (test_data['DP'] * 3) + (test_data['DS'] * 2) + test_data['DL']
+test_data['total_decels'] = test_data['DP'] + test_data['DS'] + test_data['DL']
+test_data['has_prolonged_decel'] = (test_data['DP'] > 0).astype(int)
+test_data['has_severe_decel'] = (test_data['DS'] > 0).astype(int)
+test_data['has_movement'] = (test_data['FM'] > 0).astype(int)
+test_data['heart_rate_range'] = test_data['Max'] - test_data['Min']
+print(" ✓ Features engineered")
+
+# 4. Reorder columns
+print("\n4. Reordering columns...")
+correct_order = ['b', 'e', 'LB', 'AC', 'FM', 'UC', 'ASTV', 'MSTV', 'ALTV', 'MLTV', 
+                 'DL', 'DS', 'DP', 'DR', 'Width', 'Min', 'Max', 'Nmax', 'Nzeros', 
+                 'Mode', 'Mean', 'Median', 'Variance', 'Tendency', 'AC_per_UC', 
+                 'ASTV_ALTV_ratio', 'total_abnormal_var', 'decel_severity', 
+                 'total_decels', 'has_severe_decel', 'has_prolonged_decel', 
+                 'has_movement', 'heart_rate_range']
+test_data = test_data[correct_order]
+print(" ✓ Columns reordered")
+
+# 5. Predict
+print("\n5. Making predictions...")
+predictions = model.predict(test_data)
+predictions_clinical = predictions + 1  # Convert to 1, 2, 3
+
+# 6. Add predictions to ORIGINAL dataframe
+test_data_original['NSP_predicted'] = predictions_clinical
+label_map = {1: 'Normal', 2: 'Suspect', 3: 'Pathologic'}
+test_data_original['NSP_label'] = test_data_original['NSP_predicted'].map(label_map)
+print(" ✓ Predictions added")
+
+# 7. Display preview
+print("\n" + "="*70)
+print("PREVIEW OF RESULTS")
+print("="*70)
+print(test_data_original[['LB', 'ASTV', 'ALTV', 'DP', 'NSP_predicted', 'NSP_label']].head(10))
+
+print("\n" + "="*70)
+print("PREDICTION SUMMARY")
+print("="*70)
+print(test_data_original['NSP_label'].value_counts())
+
+# 8. Save to CSV
+output_file = 'test_sample_with_predictions.csv'
+test_data_original.to_csv(output_file, index=False)
+print(f"\n✓ Saved to: {output_file}")
+
+# 9. AUTO-DOWNLOAD to your computer 
+print("\n" + "="*70)
+print("DOWNLOADING FILE TO YOUR COMPUTER...")
+print("="*70)
+files.download(output_file)
+print("✓ Download started! Check your browser's download folder.")
+
+Step 6: View Results
+- The predictions will be displayed in the output
+- A CSV file with predictions will automatically download to your computer
+- 
 ---
 
 ## References
@@ -262,7 +375,4 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 - Handling Imbalanced Data: *Scikit-learn documentation on class weights and SMOTE*  
   https://scikit-learn.org/stable/modules/generated/sklearn.utils.class_weight.compute_sample_weight.html  
----
 
-## Acknowledgments
-We thank MLDA@EEE for organizing Datathon 2025 and providing medical context materials.
