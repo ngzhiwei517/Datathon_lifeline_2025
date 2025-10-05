@@ -28,7 +28,7 @@ For how to train and test the model, please refer part 6, you can click the link
    - [10. Inference Performance](#10-inference-performance)
 5. [Final Results](#final-results)
 6. [Training||Testing](#Training||Testing)
-7. [References](#references)
+
 
 
 ---
@@ -274,6 +274,9 @@ Step 4: Get Your CSV File Path
 
 Step 5: Run This Code
 
+### Step 5: Run the Code
+
+```python
 import pickle
 import pandas as pd
 from google.colab import files
@@ -352,27 +355,5 @@ print("DOWNLOADING FILE TO YOUR COMPUTER...")
 print("="*70)
 files.download(output_file)
 print("✓ Download started! Check your browser's download folder.")
-
-Step 6: View Results
-- The predictions will be displayed in the output
-- A CSV file with predictions will automatically download to your computer
-- 
 ---
-
-## References
-- UCI Cardiotocography Dataset: https://archive.ics.uci.edu/dataset/193/cardiotocography
-- Medical context: Workshop materials on CTG interpretation and fetal monitoring
-
-### Technical Resources
-- Random Forest Explained: *StatQuest - Random Forests Part 1*  
-  https://www.youtube.com/watch?v=J4Wdy0Wc_xQ  
-
-- Gradient Boosting Tutorial: *StatQuest - Gradient Boost Part 1*  
-  https://www.youtube.com/watch?v=3CC4N4z3GJc  
-
-- Cross-Validation Tutorial: *StatQuest - Cross Validation Explained*  
-  https://www.youtube.com/watch?v=fSytzGwwBVw  
-
-- Handling Imbalanced Data: *Scikit-learn documentation on class weights and SMOTE*  
-  https://scikit-learn.org/stable/modules/generated/sklearn.utils.class_weight.compute_sample_weight.html  
 
