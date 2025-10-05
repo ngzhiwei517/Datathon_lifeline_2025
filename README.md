@@ -223,7 +223,7 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ---
 
-## Testing & Predictions
+## Training||Testing
 
 ### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
@@ -249,7 +249,7 @@ Training the Model (Google Colab)
 -Run all cells sequentially
 -The model will be trained and saved as xgboost_model.pkl
 
-### Training||Testing
+### Testing
 
 Step 1: Download Required Files
 
