@@ -27,8 +27,7 @@ For how to train and test the model, please refer part 6, you can click the link
    - [9. Cross-Validation](#9-cross-validation)
    - [10. Inference Performance](#10-inference-performance)
 5. [Final Results](#final-results)
-6. [Training||Testing](#Training||Testing)
-
+6. [Training & Testing](#training--testing)
 
 
 ---
@@ -223,7 +222,7 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ---
 
-## Training||Testing
+## Training & Testing
 
 ### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
