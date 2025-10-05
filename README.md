@@ -249,7 +249,7 @@ Training the Model (Google Colab)
 -Run all cells sequentially
 -The model will be trained and saved as xgboost_model.pkl
 
-### Testing & Predictions
+### Training||Testing
 
 Step 1: Download Required Files
 
