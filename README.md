@@ -366,12 +366,6 @@ pip install pandas numpy scikit-learn xgboost joblib
 ```
 
 ###  Training from Scratch
-project_folder/
-│
-├── train.py
-├── CTG_original_3.csv
-└── (model files will be saved here automatically)
-
 Steps
 
 1. Place CTG_original_3.csv in the same folder as your train.py.
@@ -384,12 +378,6 @@ python train.py
 ---
 
 ### Running Inference (Testing)
-project_folder/
-│
-├── test.py
-├── xgboost_model.pkl      (trained model weight)
-├── test_sample.csv        (your test data file)
-└── feature_names.pkl      (only if test.py requires it)
 
 Steps
 1. Ensure your trained model (xgboost_model.pkl) and test file (test_sample.csv) are in the same folder as test.py.
