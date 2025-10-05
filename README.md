@@ -227,15 +227,15 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
-Training the Model (Google Colab)
+### Training the Model (Google Colab)
 
-1. Open Google Colab
+### 1. Open Google Colab
 
 -Go to colab.research.google.com
 -Click "New Notebook"
 
 
-2. Upload Files to Colab
+### 2. Upload Files to Colab
 
 -Left sidebar → Files icon (folder icon)
 -Click "Upload" button
@@ -244,7 +244,7 @@ Training the Model (Google Colab)
    Project notebook (.ipynb file)
    Dataset file: CTG_Original_3.csv (download from our datasets folder)
 
-3. Run the Notebook
+### 3. Run the Notebook
 
 -Run all cells sequentially
 -The model will be trained and saved as xgboost_model.pkl
