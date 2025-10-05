@@ -224,7 +224,7 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ## Training & Testing
 
-### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
+### Option 1: Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
 ### Training the Model (Google Colab)
 
@@ -355,3 +355,45 @@ print("DOWNLOADING FILE TO YOUR COMPUTER...")
 print("="*70)
 files.download(output_file)
 print("✓ Download started! Check your browser's download folder.")
+```
+---
+Option 2: Local Python Environment
+
+####  Prerequisites
+Make sure you have Python 3.x installed and install the following packages:
+```bash
+pip install pandas numpy scikit-learn xgboost joblib
+```
+
+###  Training from Scratch
+project_folder/
+│
+├── train.py
+├── CTG_original_3.csv
+└── (model files will be saved here automatically)
+
+Steps
+
+1. Place CTG_original_3.csv in the same folder as your train.py.
+2. Run the following command to train your models:
+```
+python train.py
+```
+
+3. After training, the model weights will be saved automatically in the same folder as .pkl files
+---
+
+### Running Inference (Testing)
+project_folder/
+│
+├── test.py
+├── xgboost_model.pkl          ← trained model weight
+├── test_sample.csv             ← your test data file
+└── feature_names.pkl           ← if your test.py requires it
+
+Steps
+1. Ensure your trained model (xgboost_model.pkl) and test file (test_sample.csv) are in the same folder as test.py.
+2. Run inference with your file:
+```
+python test.py your_test_data.csv
+```
