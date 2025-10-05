@@ -224,122 +224,82 @@ Confirms robust generalization across diverse patient subsets. Test performance 
 
 ## Training & Testing
 
-### Prerequisites
+### Google Colab Instructions (You can either train from scratch to get the model or you can use our train model (XGBoost-best model) directly to test the data)
 
-**Required Files:**
-- `CTG.csv` - Training dataset (download from datasets folder)
-- `train.py` - Training script
-- `test.py` - Testing script
+### Training the Model (Google Colab)
 
-**Required Libraries:**
-`python`
-pandas, numpy, scikit-learn, xgboost
+### 1. Open Google Colab
 
-Option 1: Training from Scratch
-Google Colab Setup
-
-1. Open Google Colab
-
-Go to colab.research.google.com
-Click "New Notebook"
+-Go to colab.research.google.com
+-Click "New Notebook"
 
 
-2. Upload Files
+### 2. Upload Files to Colab
 
-Left sidebar → Files icon (📁)
-Click "Upload" button
-Upload: train.py and CTG.csv
+-Left sidebar → Files icon (folder icon)
+-Click "Upload" button
+-Upload the following files:
 
+   Project notebook (.ipynb file)
+   Dataset file: CTG_Original_3.csv (download from our datasets folder)
 
-3. Install Dependencies
+### 3. Run the Notebook
 
-!pip install xgboost scikit-learn pandas numpy
+-Run all cells sequentially
+-The model will be trained and saved as xgboost_model.pkl
 
-4. Run Training Script
+---
 
-!python train.py
+### Testing
 
-Training Output:
+### Step 1: Download Required Files
 
-xgboost_model.pkl - Trained model weights (0.53 MB)
-feature_names.pkl - Feature order reference
-Training metrics printed to console
+Download these files from our repository:
+- xgboost_model.pkl (trained model) / or you can choose to use our train model directly
+- Your test CSV file (must have the same columns as training data)
 
-Expected Training Time: 2-3 minutes on Colab CPU
+### Step 2: Open New Colab Notebook
+-Click "New Notebook"
 
-## Option 2: Using Pre-trained Model (Recommended)
-If you want to skip training and directly test predictions, download our pre-trained model:
+### Step 3: Upload Files to Colab 
+1. Left sidebar → Files icon (folder icon)
+2. Click "Upload" button
+3. Upload these 2 files:
+   * xgboost_model.pkl
+   * Your test data CSV (e.g., test_sample.csv)
 
-xgboost_model.pkl (available in repository)
-
-
-Testing Instructions
-Method A: Command Line Testing (Local/Colab)
-
-2. Upload Required Files to Colab
-
-test.py
-xgboost_model.pkl (trained or pre-trained)
-Your test CSV file (e.g., test_sample.csv)
-
-
-2. Install Dependencies (if not already installed)
-
-!pip install xgboost pandas
-
-3. Run Test Script
-
-# Default (uses test_sample.csv)
-!python test.py
-
-# Or specify your CSV file
-!python test.py your_test_file.csv
-
-4. Output
-
-Predictions displayed in console
-New file created: test_sample_predictions.csv (with NSP_predicted and NSP_label columns)
-
-Method B: Interactive Testing in Colab Notebook
-Step 1: Upload Files
-
-Left sidebar → Files icon → Upload:
-
-xgboost_model.pkl
-Your test CSV file
+### Step 4: Get Your CSV File Path
+1. In the Files panel, find your uploaded CSV file
+2. Right-click the file → "Copy path"
+3. It will look like: /content/test_sample.csv
 
 
+### Step 5: Run the Code
 
-Step 2: Get CSV File Path
-
-Right-click your CSV file → "Copy path"
-Example: /content/test_sample.csv
-
-Step 3: Run Prediction Code
-
+```python
 import pickle
 import pandas as pd
 from google.colab import files
 
 print("="*70)
-print("FETAL DISTRESS DETECTION - TESTING")
+print("TESTING XGBOOST MODEL")
 print("="*70)
 
-# 1. Load trained model
-print("\n[1/6] Loading model...")
+# 1. Load model
+print("\n1. Loading model...")
 with open('xgboost_model.pkl', 'rb') as f:
     model = pickle.load(f)
-print("✓ Model loaded successfully")
+print(" ✓ Model loaded")
 
 # 2. Load test data
-print("\n[2/6] Loading test data...")
-test_file = '/content/test_sample.csv'  # UPDATE THIS PATH
-test_data_original = pd.read_csv(test_file)
+print("\n2. Loading test data...")
+input_file = '/content/test_sample.csv'  # UPDATE THIS PATH
+test_data_original = pd.read_csv(input_file)
 test_data = test_data_original.copy()
-print(f"✓ Loaded {len(test_data)} samples")
+print(f" ✓ Loaded {len(test_data)} samples")
 
-# 3. Feature engineering (must match training)
-print("\n[3/6] Engineering features...")
+# 3. Feature engineering
+print("\n3. Applying feature engineering...")
 test_data['AC_per_UC'] = test_data['AC'] / (test_data['UC'] + 1)
 test_data['total_abnormal_var'] = test_data['ASTV'] + test_data['ALTV']
 test_data['ASTV_ALTV_ratio'] = test_data['ASTV'] / (test_data['ALTV'] + 1)
@@ -349,99 +309,49 @@ test_data['has_prolonged_decel'] = (test_data['DP'] > 0).astype(int)
 test_data['has_severe_decel'] = (test_data['DS'] > 0).astype(int)
 test_data['has_movement'] = (test_data['FM'] > 0).astype(int)
 test_data['heart_rate_range'] = test_data['Max'] - test_data['Min']
-print("✓ 9 engineered features created")
+print(" ✓ Features engineered")
 
-# 4. Reorder columns to match training feature order
-print("\n[4/6] Preparing features...")
-feature_order = ['b', 'e', 'LB', 'AC', 'FM', 'UC', 'ASTV', 'MSTV', 'ALTV', 'MLTV',
-                 'DL', 'DS', 'DP', 'DR', 'Width', 'Min', 'Max', 'Nmax', 'Nzeros',
-                 'Mode', 'Mean', 'Median', 'Variance', 'Tendency', 'AC_per_UC',
-                 'ASTV_ALTV_ratio', 'total_abnormal_var', 'decel_severity',
-                 'total_decels', 'has_severe_decel', 'has_prolonged_decel',
+# 4. Reorder columns
+print("\n4. Reordering columns...")
+correct_order = ['b', 'e', 'LB', 'AC', 'FM', 'UC', 'ASTV', 'MSTV', 'ALTV', 'MLTV', 
+                 'DL', 'DS', 'DP', 'DR', 'Width', 'Min', 'Max', 'Nmax', 'Nzeros', 
+                 'Mode', 'Mean', 'Median', 'Variance', 'Tendency', 'AC_per_UC', 
+                 'ASTV_ALTV_ratio', 'total_abnormal_var', 'decel_severity', 
+                 'total_decels', 'has_severe_decel', 'has_prolonged_decel', 
                  'has_movement', 'heart_rate_range']
-test_data = test_data[feature_order]
-print(f"✓ {len(feature_order)} features ready for prediction")
+test_data = test_data[correct_order]
+print(" ✓ Columns reordered")
 
-# 5. Make predictions
-print("\n[5/6] Making predictions...")
+# 5. Predict
+print("\n5. Making predictions...")
 predictions = model.predict(test_data)
-predictions_clinical = predictions + 1  # Convert 0,1,2 → 1,2,3
+predictions_clinical = predictions + 1  # Convert to 1, 2, 3
 
-# Add predictions to original dataframe
+# 6. Add predictions to ORIGINAL dataframe
 test_data_original['NSP_predicted'] = predictions_clinical
 label_map = {1: 'Normal', 2: 'Suspect', 3: 'Pathologic'}
 test_data_original['NSP_label'] = test_data_original['NSP_predicted'].map(label_map)
-print("✓ Predictions complete")
+print(" ✓ Predictions added")
 
-# 6. Display results
+# 7. Display preview
 print("\n" + "="*70)
-print("PREDICTION RESULTS - SAMPLE")
+print("PREVIEW OF RESULTS")
 print("="*70)
-display_cols = ['LB', 'ASTV', 'ALTV', 'DP', 'NSP_predicted', 'NSP_label']
-print(test_data_original[display_cols].head(10).to_string(index=False))
+print(test_data_original[['LB', 'ASTV', 'ALTV', 'DP', 'NSP_predicted', 'NSP_label']].head(10))
 
 print("\n" + "="*70)
 print("PREDICTION SUMMARY")
 print("="*70)
 print(test_data_original['NSP_label'].value_counts())
-print(f"\nTotal predictions: {len(test_data_original)}")
 
-print("\n" + "="*70)
-print("LABEL DEFINITIONS")
-print("="*70)
-print("  1 = Normal      → Healthy fetal status")
-print("  2 = Suspect     → Borderline, requires monitoring")
-print("  3 = Pathologic  → High risk, immediate attention needed")
-
-# 7. Save predictions
-output_file = 'predictions_output.csv'
+# 8. Save to CSV
+output_file = 'test_sample_with_predictions.csv'
 test_data_original.to_csv(output_file, index=False)
-print(f"\n✓ Full results saved to: {output_file}")
+print(f"\n✓ Saved to: {output_file}")
 
-# 8. Auto-download to your computer
+# 9. AUTO-DOWNLOAD to your computer 
 print("\n" + "="*70)
-print("DOWNLOADING RESULTS...")
+print("DOWNLOADING FILE TO YOUR COMPUTER...")
 print("="*70)
 files.download(output_file)
-print("✓ Check your browser's Downloads folder!")
-
-Test Data Requirements
-Your test CSV must contain these 21 columns (same as training data):
-Core CTG Features:
-
-LB - Baseline fetal heart rate
-AC - Accelerations
-FM - Fetal movements
-UC - Uterine contractions
-DL, DS, DP - Deceleration types
-ASTV, MSTV, ALTV, MLTV - Variability measures
-
-Histogram Features:
-
-Width, Min, Max, Nmax, Nzeros, Mode, Mean, Median, Variance, Tendency
-
-Additional:
-
-b, e, DR
-
-Note: The model will automatically create 9 engineered features during prediction. Do NOT include these in your test CSV:
-
-AC_per_UC, total_abnormal_var, ASTV_ALTV_ratio, decel_severity, total_decels, has_prolonged_decel, has_severe_decel, has_movement, heart_rate_range
-
-
-Troubleshooting
-Error: "KeyError: column not found"
-
-Ensure your CSV has all 21 required columns with exact names (case-sensitive)
-
-Error: "FileNotFoundError: xgboost_model.pkl"
-
-Verify the model file is uploaded to Colab
-Check file name spelling
-
-Predictions seem incorrect:
-
-Verify your CSV uses the same units/scales as training data
-Check for missing values (model expects no NaN values)
-
-For more help: Check our repository issues or contact the team.
+print("✓ Download started! Check your browser's download folder.")
