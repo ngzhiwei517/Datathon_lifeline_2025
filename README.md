@@ -387,9 +387,9 @@ python train.py
 project_folder/
 │
 ├── test.py
-├── xgboost_model.pkl          ← trained model weight
-├── test_sample.csv             ← your test data file
-└── feature_names.pkl           ← if your test.py requires it
+├── xgboost_model.pkl      (trained model weight)
+├── test_sample.csv        (your test data file)
+└── feature_names.pkl      (only if test.py requires it)
 
 Steps
 1. Ensure your trained model (xgboost_model.pkl) and test file (test_sample.csv) are in the same folder as test.py.
